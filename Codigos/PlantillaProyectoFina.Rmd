@@ -1,0 +1,381 @@
+---
+title: "Plantilla"
+author: "Andrés Martínez"
+date: "26 03 2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE)
+
+
+```
+
+
+```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+#install.packages("bookdown")
+#Librerias que se van a utilizar
+rm(list=ls())
+library(quantmod)
+#asset.names = c("VIVAX","NAESX","VIMSX","VEIEX","VISVX","VFINX","VWELX","VWNDX","VEXPX","VWUSX","VQNPX")# Escoja uno de los fondos no es necesario descargarlos todos
+
+#getSymbols(asset.names,src="yahoo",from="2018-03-12",to="2020-03-20")
+```
+
+## Introducci?n
+
+Esta es una plantilla para presentar el parcial (Por favor revisar las tildes)
+
+
+## Análisis Inicial
+```{r, echo=FALSE, message=FALSE,warning=FALSE}
+
+# Hacer an?lisis del ?ndice
+
+```
+
+
+```{r, echo=FALSE, message=FALSE,results='hide',warning=FALSE}
+symbols=c("MSFT","AMZN","GOOG","AAPL")# Vector de caracteres
+#simbolos=c("ABT","ICE","CSCO","BAC","HPQ","MRK")
+getSymbols(symbols,src='yahoo',from="2018-03-12",to="2020-03-20")
+STocks=cbind(MSFT$MSFT.Close,AMZN$AMZN.Close,GOOG$GOOG.Close,AAPL$AAPL.Close)
+
+STocks=STocks[complete.cases(STocks), ]
+
+```
+
+
+### Graficos de Precios y Rendimientos
+Como parte de la exploraci?n de datos, primero se revisar?n los precios de cierre en el per?odo observado para determinar si existen tendencias o ciclos que permitan comparar el comportamiento del precio de cada una.
+
+```{r Precios, fig.width = 3, fig.height = 1,fig.cap=" Precios Acciones", echo=FALSE, message=FALSE}
+colnames(STocks)=c("A","B","C","D","E")
+
+par(mfrow=c(3,3))
+plot(STocks$A, col="green",main = symbols[1])
+plot(STocks$B,col="red",main=symbols[2])
+plot(STocks$C,col="blue",main=symbols[3])
+plot(STocks$D,main=symbols[4])
+
+```
+
+
+
+
+
+```{r, echo=FALSE, message=FALSE,fig.cap='Rendimientos'}
+
+ a= Delt(ABT$ABT.Close) # Rendimientos trabajado con porcentajes
+a=a[-1,]
+b = Delt(ICE$ICE.Close)
+b=b[-1,]
+c =Delt(CSCO$CSCO.Close)
+c=c[-1,]
+d = Delt(BAC$BAC.Close)
+d=d[-1,]
+
+par(mfrow=c(2,2))
+plot(a,col="green",main = symbols[1])
+plot(b,col="red",main = symbols[2])
+plot(c,col="blue",main = symbols[3])
+plot(d,main = symbols[4])
+
+
+
+```
+
+### An?lisis estad?stico
+
+
+
+Se hace para una acci?n pero es lo mismo para las demás
+
+```{r, echo=FALSE, message=FALSE,fig.width = 3, fig.height = 1}
+library(car)## qqPlot
+par(mfrow=c(2,2))
+rend=cbind(a,b,c,d)
+colnames(rend)=c("a","b","c","d")
+hist(as.numeric(rend$a),breaks=40,main="",xlab=paste("Rendimientos",symbols[1]), col="red")
+plot(density(rend$a), main=paste("Rendimientos",symbols[1]),col="red")# Grafica de densidad
+qqPlot(rend$a ,main=paste("Rendimientos",symbols[1]))
+boxplot(as.numeric(rend$a),horizontal = TRUE,col="red",main=paste("Rendimientos",symbols[1]))
+
+  
+```
+
+```{r, echo=FALSE, message=FALSE}
+library(car)## qqPlot
+
+par(mfrow=c(2,2))
+
+hist(as.numeric(tail(e,180)),breaks=40,main="",xlab="NAESX", col="brown")
+plot(density(tail(e,180)), main="NAESX",col="brown")# Grafica de densidad
+qqPlot(tail(e,180),main="NAESX")
+boxplot(as.numeric(tail(e,180)),horizontal = TRUE,col="brown",main="NAESX")
+
+
+
+layout(mat = matrix(c(1,2),2,1, byrow=TRUE),  height = c(1,8))
+ 
+# Draw the boxplot and the histogram 
+par(mar=c(0, 3.1, 1.1, 2.1))
+boxplot(as.numeric(tail(e,180)), horizontal=TRUE, xaxt="n" , frame=F,col="brown")
+
+  
+```
+
+
+### Estadísticas Descriptivas
+
+
+
+
+```{r, echo=FALSE, message=FALSE,fig.cap='Rendimientos'} 
+
+options(digits = 3)
+library(psych)
+
+rend1=cbind(a,b,c,d)
+colnames(rend1)=c(symbols[1],symbols[2],symbols[3],symbols[4])
+rend1=describe(tail(rend1,50))
+
+
+```
+
+### Índice de Sharpe
+
+Consultar material de clase
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE} 
+
+
+
+
+```
+
+### Correlación
+
+
+Consultar material de clase
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE} 
+
+
+
+
+```
+
+## Teoría de Portafolio
+
+
+```{r vol, echo=FALSE, message=FALSE,fig.cap='Rendimientos'}
+
+ a= Delt(STocks$A) # Rendimientos trabajado con porcentajes
+a=a[-1,]
+b = Delt(STocks$B)
+b=b[-1,]
+c =Delt(STocks$C)
+c=c[-1,]
+d = Delt(STocks$D)
+d=d[-1,]
+e=Delt(VIVAX$VIVAX.Close)
+e=e[-1,]
+
+
+
+```
+
+
+A partir de este punto comienza el an?lisis de portafolio
+
+### Portafolio 
+
+
+Consultar material de clase
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE} 
+
+
+#mmsft=mean(msft/100)*20
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+
+```{r , echo=FALSE, warning=FALSE,message=FALSE}
+
+
+
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+```{r, echo=FALSE, message=FALSE,warning=FALSE} 
+
+
+
+
+```
+
+### Back Testing
+
+
+Suponga que uno de los portafolios da el siguiente resultado
+
+20% microsoft, 30% amazon, 20%goog y 30% apple, con estos pesos puede construir su portafolio y revisar la tendencia desde el 2018
+
+Este ejemplo eso solo para uno de los que se piden
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# Construcci?n del portafolio
+port=as.data.frame(rep(1,length(STocks[,1])))# Cree un data frame
+port$b=rep(1,length(STocks[,1]))# Agregue columnas
+port$c=rep(1,length(STocks[,1]))
+port$d=rep(1,length(STocks[,1]))
+
+
+colnames(port)=symbols
+pesos=c(0.2,0.3,0.2,0.3)# Asumiendo que los pesos del mínimo global
+for (i in 1:length(STocks[,1])){
+port[i,]=as.data.frame( STocks[i,]*pesos)
+
+}
+
+
+
+portmin=as.data.frame(rowSums(port))
+colnames(portmin)="PortafolioMin"
+portmin=t(portmin)
+```
+
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+getSymbols("VEIEX",src='yahoo',from="2018-03-12",to="2020-03-20")
+o=data.frame(date=index(MSFT), coredata(MSFT))
+par(mfrow=c(2,1))
+plot(o$date,portmin,type="l",col="blue",xlab="Fechas",main="Portafolio eficiente")
+plot(VEIEX$VEIEX.Close,col="red")
+
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# Construcci?n del portafolio
+port=as.data.frame(rep(1,length(STocks[,1])))# Cree un data frame
+port$b=rep(1,length(STocks[,1]))# Agregue columnas
+port$c=rep(1,length(STocks[,1]))
+port$d=rep(1,length(STocks[,1]))
+        colnames(port)=symbols
+pesos=c(0.1,0.4,0.2,0.3)# cambiar estos pesos
+for (i in 1:length(STocks[,1])){
+port[i,]=as.data.frame( STocks[i,]*pesos)
+
+}
+
+
+
+portop=as.data.frame(rowSums(port))
+colnames(portop)="PortafolioOpt"
+portop=t(portop)
+t=1:length(STocks[,1])
+```
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+getSymbols("VEIEX",src='yahoo',from="2018-03-12",to="2020-03-20")
+o=data.frame(date=index(MSFT), coredata(MSFT))
+par(mfrow=c(3,1))
+plot(t,portop,type="l",col="blue",xlab="Fechas",main="Portafolio eficiente")
+plot(o$date,portmin,type="l",col="blue",xlab="Fechas",main="Portafolio eficiente")
+plot(VEIEX$VEIEX.Close,col="red")
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+## Análisis del CAPM
+
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+getSymbols("DGS1MO", src="FRED")
+getSymbols("VIVAX",src="yahoo",from="2018-03-12",to="2020-03-20")
+TBILL=DGS1MO["2018::2020-03"]
+#Assets=cbind(MSFT$MSFT.Close,AMZN$AMZN.Close,GOOG$GOOG.Close,AAPL$AAPL.Close,VIVAX$VIVAX.Close)
+#simbolos=c("NEE","JPM","NEM","WDC","TIF","JNJ")
+Assets=cbind(NEE$NEE.Close,JPM$JPM.Close,NEM$NEM.Close,WDC$WDC.Close,TIF$TIF.Close,JNJ$JNJ.Close,VIVAX$VIVAX.Close)
+
+Assets<-merge(Assets, TBILL)
+index.notNA.VIVAX<-which(is.na(coredata(Assets$VIVAX.Close))==FALSE)
+Assets<-Assets[index.notNA.VIVAX,]
+Assets<-na.locf(Assets)
+apply(is.na(Assets)==TRUE, 2,sum)# Si despu?s de esta funci?n  quedan en ceros, est? bien
+
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+Assets<-na.locf(Assets)
+apply(is.na(Assets)==TRUE, 2,sum)# Si despu?s de esta funci?n  quedan en ceros, est? bien
+
+```
+
+##Conclusiones
+
