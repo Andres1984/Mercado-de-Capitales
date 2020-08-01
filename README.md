@@ -32,8 +32,7 @@ https://terminal.e-bvc.com.co/htmlterminal/bolsacolombia/htbolsacolombia.html
 
 *	Mishkin, F. S., & Gómez Mont Araiza, J. (2008). Moneda, banca y mercados financieros (No. Sirsi) a453680).
 *	Cochrane, J. H. (2009). Asset pricing: Revised edition. Princeton university press.
-*	Bodie, Z. et al. (2009).  Investments.
-* Tata McGraw-Hill Education. Journal of financial Economics, 7(3):229–263. 
+*	Bodie, Z. et al. (2009).  Investments. Tata McGraw-Hill Education. 
 *	Dumrauf, G. L. (2015). Análisis cuantitativo de bonos. Alfaomega. 
 
 #### Referncias Secundarias
