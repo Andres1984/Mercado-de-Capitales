@@ -10,6 +10,8 @@ amzn=Delt(AMZN$AMZN.Close)[-1]
 hist(msft,breaks = 80, col="red", main = "MFST")
 hist(amzn,breaks = 80, col="blue", main = "AMZN")
 
+plot(msft,col="red",type="l")# Rendimientos
+plot(amzn,col="blue",type="l")
 
 # Portafolio mínimo global
 
