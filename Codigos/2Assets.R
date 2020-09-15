@@ -1,5 +1,5 @@
 library(quantmod)
-getSymbols(c("AMZN","MSFT"),src="yahoo",from="2018-07-07",to="2020-07-07")
+getSymbols(c("AMZN","MSFT"),src="yahoo",from="2019-01-01",to="2020-09-15")
 barChart(MSFT)
 barChart(AMZN)
 
