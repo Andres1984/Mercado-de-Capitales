@@ -36,7 +36,7 @@ sdmin=sqrt(varmin)
 x.A=seq(from=-0.4, to=1.4, by=0.1)
 x.B=1-x.A
 mu.p = x.B*mmsft + x.A*mamzn
-sig2.p = x.B^2 * sdmsft^2 + x.A^2 * sdamzn^2 + 2*x.A*x.B*0.74*sdmsft*sdamzn
+sig2.p = x.B^2 * sdmsft^2 + x.A^2 * sdamzn^2 + 2*x.A*x.B*corrp*sdmsft*sdamzn
 sig.p = sqrt(sig2.p)
 
 ## Graficar la frontera eficiente
