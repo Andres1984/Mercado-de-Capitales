@@ -165,7 +165,7 @@ rhog1=sigm.g1/(sigmaapp*sigmamin )# Correlación
 
 # Creación de la  frontera eficiente
 
-a=seq(from=-0.5,to=1.5, by=0.05)
+a=seq(from=-2.5,to=1.5, by=0.05)
 n.a=length(a)
 z.mat=matrix(0, n.a, n)#Crear la matriz para guardar los resultados delas ponderaciones
 colnames(z.mat) = c("AMZN","AAPL","GOOG","MSFT")
@@ -192,7 +192,7 @@ sig.z=sqrt(sig2.z)
 
 
 
-plot(sig.z,mu.z,pch=16,xlab=expression(sigma[p]), ylab=expression(mu[p]),col="brown",ylim=c(0.01, 0.06), xlim=c(0.08,0.12),main="Frontera eficiente")
+plot(sig.z,mu.z,pch=16,xlab=expression(sigma[p]), ylab=expression(mu[p]),col="brown",ylim=c(0.01, 0.07), xlim=c(0.08,0.16),main="Frontera eficiente")
 points(sigmamin ,mmin, pch=16, cex=2,col="blue")
 points(sdmsft,mmsft,pch=16, cex=2, col="orange")
 points(sdamzn,mamzn,pch=16, cex=2, col="yellow" )
@@ -203,6 +203,7 @@ points(sigmamsft,mumsft ,pch=16, cex=2, col="orange")
 points(sigmaamzn,muamzn,pch=16, cex=2, col="yellow" )
 points(sigmaapp,muapp,pch=16, cex=2, col="green" )
 points(sigmagoog,mugogg,pch=16, cex=2, col="purple" )
+points(sigmaop,muop,pch=16, cex=2,col="pink")
 text(sdappl ,maapl, labels="AAPL", pos=4)
 text(sdgoog ,mgoog, labels="GOOG", pos=4)
 text(sigmamin ,mmin, labels="Global min", pos=4)
@@ -213,8 +214,136 @@ text(sigmagoog,mugogg, labels="P4", pos=2)
 text(sigmaamzn,muamzn, labels="P3", pos=2)
 text(sigmamsft,mumsft, labels="P2", pos=2)
 text(sigmaa,muna, labels="Naive", pos=4)
+text(sigmaop,muop, labels="Optimo", pos=4)
 
 library(PerformanceAnalytics)
 
 
 barplot(z.mat[19,], col="blue")
+
+
+
+#### Portafolio Óptimo max Índice de Sharpe
+
+r=0.08/100
+rf=(1+r)^(1/12)-1
+one=rep(1,n)
+mu.vecr=mu.vec-rf*one
+topt=solve(sigma2)%*%t(mu.vecr)
+bott=t(one)%*%topt
+wopt=topt[,1]/bott
+sum(wopt)
+muop=mu.vec%*%wopt
+sigma2op=t(wopt)%*%sigma2%*%wopt
+sigmaop=sqrt(sigma2op)
+sum(wopt)
+
+
+### Construcción de la  Capital Market Line
+
+
+
+
+# Portafolio usando la ecuación número 1 
+x.t = seq(0, 2, by=0.1)
+mu.pe = rf  + x.t*(muop - rf )# Ecuación número 4 
+sig.pe = x.t*sigmaop 
+
+
+
+
+
+plot(sig.z,mu.z,pch=16,xlab=expression(sigma[p]), ylab=expression(mu[p]),col="brown",ylim=c(0, 0.07), xlim=c(0,0.2),main="Frontera eficiente")
+points(sigmamin ,mmin, pch=16, cex=2,col="blue")
+points(sdmsft,mmsft,pch=16, cex=2, col="orange")
+points(sdamzn,mamzn,pch=16, cex=2, col="yellow" )
+points(sdappl,maapl,pch=16, cex=2, col="green" )
+points(sdgoog,mgoog,pch=16, cex=2, col="purple" )
+points(sigmaa,muna,pch=16,cex=2,col="red")
+points(sigmamsft,mumsft ,pch=16, cex=2, col="orange")
+points(sigmaamzn,muamzn,pch=16, cex=2, col="yellow" )
+points(sigmaapp,muapp,pch=16, cex=2, col="green" )
+points(sigmagoog,mugogg,pch=16, cex=2, col="purple" )
+points(sigmaop,muop,pch=16, cex=2,col="pink")
+points(sig.pe,mu.pe,pch=16,cex=2,col="purple")
+text(sdappl ,maapl, labels="AAPL", pos=4)
+text(sdgoog ,mgoog, labels="GOOG", pos=4)
+text(sigmamin ,mmin, labels="Global min", pos=4)
+text(x=sdamzn, y=mamzn, labels="AMZN", pos=4)
+text(x=sdmsft, y=mmsft, labels="MSFT", pos=4)
+text(sigmaapp,muapp, labels="P1", pos=2)
+text(sigmagoog,mugogg, labels="P4", pos=2)
+text(sigmaamzn,muamzn, labels="P3", pos=2)
+text(sigmamsft,mumsft, labels="P2", pos=2)
+text(sigmaa,muna, labels="Naive", pos=4)
+text(sigmaop,muop, labels="Optimo", pos=4)
+
+
+
+### Back Testing
+
+STocks=cbind(AMZN$AMZN.Close,AAPL$AAPL.Close,GOOG$GOOG.Close,MSFT$MSFT.Close)
+# Construcción del portafolio 
+port=as.data.frame(rep(1,length(STocks[,1])))# Cree un data frame
+port$b=rep(1,length(STocks[,1]))# Agregue columnas
+port$c=rep(1,length(STocks[,1]))
+port$d=rep(1,length(STocks[,1]))
+
+
+colnames(port)=c("AMZN","AAPL","GOOG","MSFT")
+pesos=wmin ## Back testing para el portafolio mínimo
+for (i in 1:length(STocks[,1])){
+  port[i,]=as.data.frame( STocks[i,]*pesos)
+  
+}
+
+
+
+portmin=as.data.frame(rowSums(port))
+colnames(portmin)="PortafolioMin"
+portmin=t(portmin)
+
+
+getSymbols("VEIEX",src='yahoo',from="2018-07-09",to="2020-10-02")
+o=data.frame(date=index(MSFT), coredata(MSFT))### Estableciendo una fecha
+par(mfrow=c(2,1))
+plot(o$date,portmin,type="l",col="blue",xlab="Fechas",main="Portafolio eficiente")
+plot(VEIEX$VEIEX.Close,col="red")
+
+rpotmin=Delt(portmin)[-1]
+veiex=Delt(VEIEX$VEIEX.Close)[-1]
+
+p=o[-1,]
+par(mfrow=c(2,1))
+plot(p$date,cumsum(t(rpotmin)),type="l",col="blue",xlab="Fechas",main="Portafolio eficiente")
+plot(cumsum((veiex)),col="red")
+
+### Back Testing
+
+STocks=cbind(AMZN$AMZN.Close,AAPL$AAPL.Close,GOOG$GOOG.Close,MSFT$MSFT.Close)
+# Construcción del portafolio 
+port=as.data.frame(rep(1,length(STocks[,1])))# Cree un data frame
+port$b=rep(1,length(STocks[,1]))# Agregue columnas
+port$c=rep(1,length(STocks[,1]))
+port$d=rep(1,length(STocks[,1]))
+
+
+colnames(port)=c("AMZN","AAPL","GOOG","MSFT")
+pesos=wopt ## Back testing para el portafolio optimo
+for (i in 1:length(STocks[,1])){
+  port[i,]=as.data.frame( STocks[i,]*pesos)
+  
+}
+
+
+portop=as.data.frame(rowSums(port))
+colnames(portop)="PortafolioOpt"
+portop=t(portop)
+
+rpotop=Delt(portop)[-1]
+
+par(mfrow=c(2,1))
+plot(p$date,cumsum(t(rpotop)),type="l",col="blue",xlab="Fechas",main="Portafolio eficiente")
+plot(cumsum((veiex)),col="red")
+
+
