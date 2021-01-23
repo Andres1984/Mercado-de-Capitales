@@ -1,7 +1,7 @@
 # Mercado de Capitales
 
 
-El Espacio Académico que aquí se presenta ha sido diseñado para ofrecer a los participantes del Programa de Finanzas y Comercio Internacional una imagen panorámica del funcionamiento general del sistema financiero no intermediado.
+El Espacio Académico que aquí se presenta ha sido diseñado para ofrecer a los participantes una imagen panorámica del funcionamiento general del sistema financiero no intermediado.
 
 Se insistirá durante el semestre en la importancia de entender los instrumentos financieros básicos, lugares de negociación, entidades reguladoras así como las principales plazas de negociación.  Los beneficios que derivan de esto son, por un lado expandir el conocimiento de las distintas culturas del mundo y, en la medida de lo posible, conociendo un poco de la geografía económica, política y social de los distintos países, acercarse a comprender cómo es que todo es como es, porque ha llegado a ser eso, es decir, que las situaciones sociales, incluyendo las políticas, económicas y financieras son el resultado de su trayectoria, de su devenir, por lo tanto, está sujeto a la posibilidad de cambio
 
