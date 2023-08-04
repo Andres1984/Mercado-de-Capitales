@@ -1,6 +1,30 @@
 library(quantmod)
 getSymbols(c("AMZN","AAPL","GOOG","MSFT"),src="yahoo",from="2018-07-09",to="2020-07-09")
 
+
+library(quantmod)
+library(dygraphs)
+library(tidyverse)
+library(lubridate)
+library(htmlwidgets)
+getSymbols("SPY", from="2016-01-01", to="2020-01-01")
+
+
+SPY <- SPY[,c(1:4)] ## remove the volume and adjusted columns
+SPY$SMA50 <- SMA(Cl(SPY), n = 50) #create SMA50 line
+p <- dygraph(SPY, xlab = "Date", ylab = "Price", main = "SPY Price") %>%
+  dySeries("SPY.Open", label = "Open", color = "black") %>%
+  dySeries("SPY.Low", label = "Low", color = "red") %>%
+  dySeries("SPY.High", label = "High", color = "green") %>%
+  dySeries("SPY.Close", label = "Close", color = "orange") %>%
+  dySeries("SMA50", label = "SMA50", color = "blue") %>%
+  dyRangeSelector() %>%
+  dyCandlestick()%>%
+  dyCrosshair(direction = "vertical") %>%
+  dyHighlight(highlightCircleSize = 3, highlightSeriesBackgroundAlpha = 0.2, hideOnMouseOut = T)  %>%
+  dyRoller(rollPeriod = 1)
+p
+
 getSymbols(c("CRUD.L", "CVX","XOM"),src="yahoo",from="2018-07-09",to="2020-07-09")
 
 
